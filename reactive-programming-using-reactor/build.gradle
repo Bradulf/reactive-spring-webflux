@@ -12,6 +12,7 @@ repositories {
 }
 
 dependencies {
+    //reactive library the main one
     implementation("io.projectreactor:reactor-core:3.4.0")
 
     //log - logback
