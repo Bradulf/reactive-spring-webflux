@@ -4,6 +4,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -14,6 +15,10 @@ public class FluxAndMonoGeneratorService {
     public Flux<String> namesFlux(){
         return Flux.fromIterable(List.of("alex", "ben", "Chloe"))
                 .log(); //could be coming from db or a remote service call
+    }
+
+    public Flux<String> lastNames(){
+        return Flux.fromIterable(Arrays.asList("Brad", "brad", "B-rad"));
     }
 
     public Flux<String> namesFluxMap(int stringLength){
@@ -41,9 +46,9 @@ public class FluxAndMonoGeneratorService {
     }
 
     private Mono<List<String>> splitStringMono(String s) {
-        var charArray= s.split("");
-        var charlist = List.of(charArray); //ALEX -> A, L, E, X
-        return Mono.just(charlist);
+        String[] charArray = s.split("");
+        List<String> charArray1 = List.of(charArray);//ALEX -> A, L, E, X
+        return Mono.just(charArray1);
     }
 
     public Flux<String> namesFlux_flatMap(int stringLength){
@@ -78,15 +83,15 @@ public class FluxAndMonoGeneratorService {
 
     //ALEX -> Flux(A,L,E,X)
     public Flux<String> splitString(String name){
-        var charArray = name.split("");
+        String[] charArray = name.split("");
         return Flux.fromArray(charArray);
     }
 
     public Flux<String> splitString_withDelay(String name){
-        var charArray = name.split("");
+        String[] split = name.split("");
 //        var delay=  new Random().nextInt(1000);
-        var delay=  1000;
-        return Flux.fromArray(charArray)
+        int delay = 1000;
+        return Flux.fromArray(split)
                 .delayElements(Duration.ofMillis(delay));
     }
 
@@ -107,5 +112,12 @@ public class FluxAndMonoGeneratorService {
             System.out.println("Mono name is : " + name);
         });
 
+        fluxAndMonoGeneratorService.namesFlux().subscribe(name -> {
+            System.out.println("name is : " + name);
+        });
+
+        fluxAndMonoGeneratorService.lastNames().subscribe(last -> {
+            System.out.println("lastname is : " + last);
+        });
     }
 }
